@@ -1,5 +1,6 @@
 const {Pokemon, Type} = require('../db/db.js')
 const axios = require ('axios')
+const {Op} = require ('sequelize')
 const {API, IMAGE3D, POKE} = process.env
 
 let totalPokemon ={}
@@ -9,18 +10,26 @@ async function getTotalPokemon(req, res){
 }
 
 async function getPokemon(req, res){
-    const {id} = req.params
+    const id = req.query.name? req.query.name : req.params.id
     let poke ={}
     let response = {}
     try{
-        if(id[0]==="A"){
+        if (req.query.name){
             response = await Pokemon.findOne({
-                where:{id_pokemon: id},
+                where:{ name: id},
                 include: Type 
-            })
+                })    
         }else{
-            response = await axios(`${API}${POKE}${id}`)
+            response = await Pokemon.findOne({
+                where:{ id_pokemon: id},
+                include: Type 
+                })  
         }
+        if(!response && 
+            ( (req.query.name && !parseInt(id))  ||
+                ( !req.query.name)
+            )            
+        )response = await axios(`${API}${POKE}${id}`)
 
         if( !(response.id_pokemon || response.data.id) ) res.status(404).send({error: 'pokemon not found'})
 
@@ -31,19 +40,27 @@ async function getPokemon(req, res){
         poke.imageIcon=response.imageFront? (response.imageIcon?response.imageIcon:'') : response.data.sprites['front_default']
         poke.bigImage=response.imageFront || `${IMAGE3D}${response.data.species.name}.png` 
         poke.types=response.types? response.types.map(e=>e.name) : response.data.types.map(e=>e.type.name)
-        poke.height = response.height || response.data.height
-        poke.weight = response.weight || response.data.weight/10
         poke.stats=
             response.hp? [
-                {name: "hp", value: response.hp},
-                {name: "attack", value: response.attack},
-                {name: "special-attack", value: response['special-attack']},
-                {name: "defense", value: response.defense},
-                {name: "special-defense", value: response['special-defense']},
-                {name: "speed", value: response.speed}]
-                : response.data.stats.map(e => {return {name: e.stat.name, value : e.base_stat}});
+                {name: "Height", value: response.height/100+'m.'},
+                {name: "Weight", value: response.weight+'kg.'},
+                {name: "Health Points", value: response.hp},
+                {name: "Attack", value: response.attack},
+                {name: "Special attack", value: response['special-attack']},
+                {name: "Speed", value: response.speed},
+                {name: "Defense", value: response.defense},
+                {name: "Special defense", value: response['special-defense']}
+            ]: response.data.stats.map(e => {
+                return {name: e.stat.name[0].toUpperCase()+e.stat.name.slice(1).replace("-"," "), value : e.base_stat}
+                })
+                if(!poke.stats.filter(e=>e.name=="Height")[0]){
+                    poke.stats.unshift(
+                        {name: "Height", value: response.data.height*10+'m.'},
+                        {name: "Weight", value: response.data.weight/10+'kg.'})
+                }
         res.status(200).send(poke)
     }catch(error){
+
         res.status(400).send(error.message)
     }
 }
@@ -56,7 +73,6 @@ async function createPokemon(req,res){
             res.status(400).send({error: 'Name', detail:'This pokemon name already exists. Try another'})
         }else{
             const id = ( await Pokemon.findAll() ).length+1
-            console.log('A'+id)
             const pokemon = await Pokemon.create({
                 id_pokemon: 'A'+id,
                 name: name,
@@ -86,7 +102,7 @@ async function createPokemon(req,res){
             } )
         }
     }catch(e){
-        console.error(e.message)
+        // throw new Error (e.message)
         res.status(500).send({error: e.message})
     }
     getTotalQuantity()

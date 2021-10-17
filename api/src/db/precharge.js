@@ -2,7 +2,7 @@ const {createPokemon} = require('../controllers/pokemonController')
 
 const createdPokes=[
     // {
-    //     "name": "pepitogrillo",
+    //     "name": "jiminicricket",
     //     "types": [ "bug", "psychic" ],
     //     "images": {
     //         "icon": "https://pa1.narvii.com/6467/6eeaaf30234f850eb234cbdafcaa936cdbfa807c_hq.gif",
@@ -24,7 +24,7 @@ const createdPokes=[
         "name": "jengi",
         "types": [ "normal", "fairy" ],
         "images": {
-        "front": "http://assets.stickpng.com/thumbs/59f878753cec115efb36238a.png",
+        "front": "https://i.ibb.co/FBFdSsd/Gingy.png",
         "backIcon":'',
         "icon":'',
         },
@@ -38,6 +38,44 @@ const createdPokes=[
         "Special Defense": 70,
         "Speed": 80
         },
+    },
+    {
+        name: "bipolarbear",
+        types: ["ice"],
+        images: {
+            front: "https://i.postimg.cc/j2pvMvS4/Bipolar-Bear.png",
+            backIcon: '',
+            icon:''
+        },
+        stats:{
+            'Hp': 120,
+            'Height': 200,     
+            'Weight': 200,
+            'Attack': 100,
+            'Special Attack':100,
+            'Defense': 80,
+            'Special Defense': 95,
+            'Speed': 80,
+        },
+    },
+    {
+        name: 'gumgolem',
+        types: [ 'normal', 'fairy' ],
+        images: {
+          front: 'https://i.postimg.cc/cHJDCrzw/Gum-Gollem.png',
+          backIcon: '',
+          icon: ''
+        },
+        stats: {
+          Hp: 80,
+          Height: 400,
+          Weight: 300,
+          Attack: 110,
+          'Special Attack': 80,
+          Defense: 130,
+          'Special Defense': 100,
+          Speed: 55
+        }
     },
     {
         "name": "stitch",
@@ -57,6 +95,82 @@ const createdPokes=[
             "Special Defense": 75,
             "Speed": 110
         },
+    },
+    {
+        name: 'harpy',
+        types: [ 'flying', 'electric' ],
+        images: {
+          front: 'https://i.postimg.cc/h4NBFBJp/Harpy.png',
+          backIcon: '',
+          icon: ''
+        },
+        stats: {
+          Hp: 75,
+          Height: 40,
+          Weight: 60,
+          Attack: 90,
+          'Special Attack': 70,
+          Defense: 90,
+          'Special Defense': 65,
+          Speed: 110
+        }
+      },
+      {
+        name: 'hippogriff',
+        types: [ 'dark', 'flying' ],
+        images: {
+          front: 'https://i.postimg.cc/cCgX7P0J/Hipopogrifo.png',
+          backIcon: '',
+          icon: ''
+        },
+        stats: {
+          Hp: 90,
+          Height: 350,
+          Weight: 400,
+          Attack: 80,
+          'Special Attack': 90,
+          Defense: 90,
+          'Special Defense': 75,
+          Speed: 80
+        }
+    },
+    {
+        "name": "grogu",
+        "types": [ "fighting", "psychic" ],
+        "images": {
+            "icon": "https://www.pnguniverse.com/wp-content/uploads/2021/03/Grogu-the-child.png",
+            "front": "https://i.ibb.co/g3YLgMW/Grogu-main.png",
+            "backIcon": "https://i.ibb.co/N1ZDXs7/Grogu-back.png"
+        },
+        "stats": {
+            "Hp": 80,
+            "Height": 60,
+            "Weight": 60,
+            "Attack": 80,
+            "Special Attack": 130,
+            "Defense": 75,
+            "Special Defense": 100,
+            "Speed": 75
+        },
+    },
+    {
+        name: 'mantychorhynchus',
+        types: [ 'psychic', 'dragon' ],
+        images: {
+          front: 'https://i.postimg.cc/DysKnMLF/Manticorrinco.png',
+          backIcon: '',
+          icon: ''
+        },
+        stats: {
+          Hp: 100,
+          Height: 240,
+          Weight: 130,
+          Attack: 95,
+          'Special Attack': 110,
+          Defense: 85,
+          'Special Defense': 105,
+          Speed: 110
+        }
     },
     {
         "name": "nemo",
@@ -97,24 +211,24 @@ const createdPokes=[
         },
     },
     {
-        "name": "grogu",
-        "types": [ "fighting", "psychic" ],
+        "name": "chimuelo",
+        "types": [ "dragon", 'dark' ],
         "images": {
-            "icon": "https://www.pnguniverse.com/wp-content/uploads/2021/03/Grogu-the-child.png",
-            "front": "https://i.ibb.co/g3YLgMW/Grogu-main.png",
-            "backIcon": "https://i.ibb.co/N1ZDXs7/Grogu-back.png"
+            "icon": "https://i.ibb.co/4JT6Gv3/Chimuelo-Icon.png",
+            "front": "http://pngimg.com/uploads/night_fury/night_fury_PNG58.png",
+            "backIcon": ""
         },
         "stats": {
-            "Hp": 80,
-            "Height": 60,
-            "Weight": 60,
-            "Attack": 80,
-            "Special Attack": 130,
-            "Defense": 75,
-            "Special Defense": 100,
-            "Speed": 75
+            "Hp": 100,
+            "Height": 6000,
+            "Weight": 250,
+            "Attack": 120,
+            "Special Attack": 90,
+            "Defense": 100,
+            "Special Defense": 80,
+            "Speed": 110
         },
-    },
+    }
 ]
 
 async function precharge(){
@@ -123,8 +237,9 @@ async function precharge(){
         res={}
         try{
             await createPokemon(req,res)
-        }catch(e){}
-        console.log(poke.name, 'charged')
+        }catch(e){
+            //ignore errors
+        }
     }
 }
 
